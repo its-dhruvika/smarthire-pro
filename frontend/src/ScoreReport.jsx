@@ -1,0 +1,16 @@
+export default function ScoreReport({ version }) {
+  if (!version) return <EmptyState />;
+  const { jdMatchScore, atsScore, skillGap } = version, match = Number(jdMatchScore || 0), ats = Number(atsScore?.overall || 0), coverage = Number(skillGap?.matchPercent || 0), breakdown = atsScore?.breakdown || [], roadmap = skillGap?.roadmap || [], matchedSkills = skillGap?.matchedSkills || [];
+  return <section className="report-page"><PageHeader title="Resume performance" subtitle="A clear breakdown of how your resume matches this job."/>
+    <div className="metric-grid"><MetricCard label="JD Match" value={match} tone="blue" status={scoreLabel(match,"match")}/><MetricCard label="ATS Score" value={ats} tone="green" status={scoreLabel(ats,"ats")}/><MetricCard label="Skill Coverage" value={coverage} tone="amber" status={scoreLabel(coverage,"coverage")}/></div>
+    <div className="report-grid">
+      <section className="content-card ats-card"><div className="section-heading"><h2>ATS breakdown</h2><span>{breakdown.length} signals</span></div><div className="breakdown-list">{breakdown.map(item => <BreakdownBar key={item.label} label={item.label} score={item.score}/>)}</div><div className="matched-skills"><div className="mini-heading">Matched skills</div>{matchedSkills.length ? <div className="skill-tags">{matchedSkills.map(s => <span key={s}>{s}</span>)}</div> : <span className="muted">None detected</span>}</div></section>
+      <section className="content-card roadmap-card"><div className="section-heading"><h2>Skill-gap roadmap</h2><span>{roadmap.length} gaps</span></div>{roadmap.length === 0 ? <div className="empty-in-card">No major skill gaps detected against this job description.</div> : <div className="roadmap-list">{roadmap.map(item => <div className="roadmap-item" key={item.skill}><div className="roadmap-top"><strong>{item.skill}</strong><span className={`priority ${String(item.priority).toLowerCase()}`}>{item.priority}</span></div><p>{item.resource}</p></div>)}</div>}</section>
+    </div>
+  </section>;
+}
+function PageHeader({title,subtitle}) { return <div className="page-heading"><div><h1>{title}</h1><p>{subtitle}</p></div></div> }
+function MetricCard({label,value,tone,status}) { return <div className="metric-card"><div className="metric-label">{label}</div><div className="metric-bottom"><strong className={`metric-value ${tone}`}>{value}</strong><span>{status}</span></div></div> }
+function BreakdownBar({label,score}) { const value=Number(score||0), tone=value>=85?"green":value>=70?"amber":"red"; return <div className="breakdown-item"><div className="breakdown-label"><span>{label}</span><strong>{value}</strong></div><div className="progress-track"><div className={`progress-fill ${tone}`} style={{width:`${Math.max(0,Math.min(100,value))}%`}}/></div></div> }
+function scoreLabel(value,type) { if(type==="coverage") return value>=80?"Strong":value>=65?"Needs work":"Low coverage"; return value>=80?"Strong match":value>=70?"Good":"Needs work" }
+function EmptyState(){return <section className="empty-page"><div className="empty-icon">◎</div><h1>Resume performance</h1><p>Run an analysis first — your score report will show up here.</p><span>Use “Upload & Analyze” from the sidebar to get started.</span></section>}

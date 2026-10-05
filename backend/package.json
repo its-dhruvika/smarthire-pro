@@ -1,0 +1,20 @@
+{
+  "name": "smarthire-pro-backend",
+  "version": "1.0.0",
+  "description": "SmartHire Pro backend - AI resume analyzer with mock interview generation and evolution tracking",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mammoth": "^1.7.2",
+    "mongoose": "^8.5.0",
+    "multer": "^2.3.0",
+    "pdf-parse": "^1.1.1"
+  }
+}
