@@ -12,12 +12,6 @@ import { generateMockInterviewQuestions } from "../utils/interviewGenerator.js";
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
-/**
- * POST /api/resume/analyze
- * form-data: resumeFile (file), jdText (string), candidateName (string),
- *            targetRole (string, optional), mode ("student" | "recruiter"),
- *            trackId (optional - if re-uploading a new version for evolution tracking)
- */
 router.post("/analyze", upload.single("resumeFile"), async (req, res) => {
   try {
     const { jdText, candidateName, targetRole, mode, trackId } = req.body;
